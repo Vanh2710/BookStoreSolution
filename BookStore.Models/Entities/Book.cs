@@ -1,5 +1,5 @@
 using System;
-
+//
 namespace BookStore.Models.Entities
 {
   public class Book

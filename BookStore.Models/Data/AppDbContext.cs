@@ -1,6 +1,6 @@
 using BookStore.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-
+//
 namespace BookStore.Models.Data
 {
   public class AppDbContext : DbContext
