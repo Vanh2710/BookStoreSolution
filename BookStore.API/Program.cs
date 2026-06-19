@@ -1,5 +1,6 @@
 using BookStore.Models.Data;
 using Microsoft.EntityFrameworkCore;
+using BookStore.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddControllers();
 
 // Cấu hình giao diện Swagger/OpenAPI mặc định
 builder.Services.AddOpenApi();
+
+// Đăng ký Generic Repository vào hệ thống DI
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 
