@@ -17,6 +17,9 @@ namespace BookStore.Models.Data
     {
       base.OnModelCreating(modelBuilder);
 
+      modelBuilder.Entity<Book>().ToTable("Books");
+      modelBuilder.Entity<User>().ToTable("Users");
+
       modelBuilder.Entity<User>()
         .HasIndex(u => u.Username)
         .IsUnique();

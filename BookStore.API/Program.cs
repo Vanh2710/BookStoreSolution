@@ -1,6 +1,7 @@
 using BookStore.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Repositories;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +28,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/openapi/v1.json", "BookStore API v1");
-    });
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
