@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using BookStore.Repositories;
 using BookStore.Models.Entities;
 using BookStore.API.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookStore.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BookController : ControllerBase
     {
         private readonly IRepository<Book> _bookRepo;
@@ -19,6 +21,7 @@ namespace BookStore.API.Controllers
 
         // 1. GET: api/books (Lấy toàn bộ danh sách sách)
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var books = await _bookRepo.GetAllAsync();
@@ -27,15 +30,17 @@ namespace BookStore.API.Controllers
 
         // 2. GET: api/books/{id} (Lấy chi tiết 1 cuốn sách theo ID)
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
-            var book = await _bookRepo.GetByIdAysnc(id);
+            var book = await _bookRepo.GetByIdAsync(id);
             if (book == null) return NotFound("Không tìm thấy cuốn sách bạn yêu cầu!");
             return Ok(book);
         }
 
         // 3. POST: api/books (Thêm mới 1 cuốn sách)
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] BookDto dto)
         {
             var newBook = new Book
@@ -55,9 +60,10 @@ namespace BookStore.API.Controllers
 
         // 4. PUT: api/books/{id} (Cập nhật thông tin sách)
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, [FromBody] BookDto dto)
         {
-            var book = await _bookRepo.GetByIdAysnc(id);
+            var book = await _bookRepo.GetByIdAsync(id);
             if (book == null) return NotFound("Sách định sửa không tồn tại!");
 
             // Cập nhật các trường dữ liệu mới từ DTO sang Entity
@@ -74,9 +80,10 @@ namespace BookStore.API.Controllers
 
         // 5. DELETE: api/books/{id} (Xóa sách)
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            var book = await _bookRepo.GetByIdAysnc(id);
+            var book = await _bookRepo.GetByIdAsync(id);
             if (book == null) return NotFound("Sách định xóa không tồn tại!");
 
             _bookRepo.Delete(book);
